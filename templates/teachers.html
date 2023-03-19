@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="../static/styles/dashboard.css">
+</head>
+<body>
+    <div id="demo">
+        <h1>My Dashboard</h1>
+        <h2>Review your student's attendance in real time here.</h2>
+        <!-- <a href="refresh()">Refresh</a> -->
+        
+        <!-- Responsive table starts here -->
+        <!-- For correct display on small screens you must add 'data-title' to each 'td' in your table -->
+        <div class="table-responsive-vertical shadow-z-1">
+        <!-- Table starts here -->
+        <table id="table" class="table table-hover table-mc-light-blue">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Time</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody>
+
+              <tbody>
+                {% for id, name, date, attendance in students %}
+                <tr>
+                  <td data-title="ID">{{ id }}</td>
+                  <td data-title="Name">
+                    {% if loop.index == 1 %}
+                      {{ name.split()[0] }}
+                    {% else %}
+                      {{ name }}
+                    {% endif %}
+                  </td>
+                  <td data-title="Time">
+                    {{ date }}
+                  </td>
+                  <td data-title="Status">{{ attendance }}</td>
+                </tr>
+                {% endfor %}
+                
+                {% if absent_students %}
+                <tr>
+                  <td colspan="4" class="absent-header">Absent:</td>
+                </tr>
+                {% for person in absent_students %}
+                <tr>
+                  <td colspan="3"></td>
+                  <td>{{ person }}</td>
+                </tr>
+                {% endfor %}
+                {% endif %}
+                </tbody>
+                
+              
+              
+
+
+        <div id="data-container"></div>
+        <script>
+
+          setInterval(function() {
+            var xhr = new XMLHttpRequest();
+            xhr.open('GET', '/data-stream');
+            xhr.onreadystatechange = function() {
+              if (xhr.readyState === 3 && xhr.status === 200) {
+                response = xhr.responseText
+                console.log(response);
+                
+              }
+            };
+            xhr.send();
+          }, 1000);
+        </script>
+
+    <script>
+setTimeout(function(){
+   window.location.reload(1);
+}, 1000);
+  </script>
+    
+</body>
+</html>
+
+
